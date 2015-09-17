@@ -1,0 +1,239 @@
+/* CSS declarations go here */
+
+$white: #fff;
+$light_grey: #eee;
+$medium_grey: #636363;
+$dark_grey: #353535;
+$black: #000;
+
+$peach: #ff8559;
+
+@import url(http://fonts.googleapis.com/css?family=Montserrat:400,700);
+
+@import 'reset';
+
+* { margin: 0; padding: 0; }
+
+body {
+	font-family: 'Montserrat', Arial, sans-serif;
+	font-size: 14px;
+	color: $light_grey;
+}
+
+header {
+	height: 34px;
+	padding: 14px 0;
+	background: linear-gradient(lighten($dark_grey, 5%), $dark_grey);
+
+	.logo {
+		float: left;
+		margin-top: 2px;
+		padding: 4px 4px 3px 6px;
+		border: 2px solid $white;
+		font-size: 1.35em;
+		font-weight: bold;
+		text-transform: uppercase;
+		text-decoration: none;
+		letter-spacing: 2px;
+		color: $white;
+		text-shadow: 0px 0px 28px $dark_grey;
+		transition: border 250ms, color 250ms;
+
+		&:hover,
+		&:focus {
+			color: $peach;
+			border-color: $peach;
+		}
+	}
+}
+
+.inner-wrap {
+	max-width: 100%;
+	width: 720px;
+	margin: 0 auto;
+}
+
+.search {
+	position: relative;
+	z-index: 3;
+	float: right;
+	width: 60%;
+
+	form {
+
+		input[type="text"] {
+			box-sizing: border-box;
+			width: 100%;
+			padding: 8px 14px;
+			background: $white;
+			border: none;
+			font-family: inherit;
+			font-size: 1em;
+			color: $medium_grey;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			appearance: none;
+
+			&:focus {
+				outline: 0;
+			}
+		}
+
+		::-webkit-input-placeholder {
+		   color: lighten($medium_grey, 25%);
+		}
+
+		:-moz-placeholder { /* Firefox 18- */
+		   color: lighten($medium_grey, 25%);  
+		}
+
+		::-moz-placeholder {  /* Firefox 19+ */
+		   color: lighten($medium_grey, 25%);  
+		}
+
+		:-ms-input-placeholder {  
+		   color: lighten($medium_grey, 25%);  
+		}
+	}
+
+	ul {
+		position: absolute;
+		z-index: 1;
+		top: 33px; left: 0; right: 0;
+		border: 1px solid darken($light_grey, 10%);
+
+		li {
+			padding: 8px 14px;
+			background: $white;
+			border-top: 1px solid darken($light_grey, 10%);
+			color: $medium_grey;
+			transition: background 250ms;
+
+			&:hover,
+			&:focus {
+				background: darken($light_grey, 10%);
+				cursor: pointer;
+			}
+
+			&:first-child {
+				border-top: 0;
+			}
+		}
+	}
+}
+
+.player {
+	position: relative;
+	padding: 32px 20px;
+	background: $light_grey;
+	overflow: hidden;
+
+	.progress-bar {
+		position: absolute;
+		z-index: 1;
+		top: 0; bottom: 0; left: 0;
+		width: 0;
+		background: darken($light_grey, 5%);
+	}
+
+	.track-details {
+		position: relative;
+		z-index: 2;
+
+		span.label {
+			display: block;
+			padding-bottom: 10px;
+			font-size: 1.15em;
+			color: lighten($medium_grey, 25%);
+		}
+
+		h2.track-title {
+			font-size: 1.15em;
+			color: $medium_grey;
+		}
+
+		.play-button {
+			float: left;
+			width: 40px;
+			height: 40px;
+			margin-right: 14px;
+			border: none;
+			border-radius: 50%;
+			background-color: $peach;
+			text-align: center;
+			text-indent: 1px;
+			color: $white;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			appearance: none;
+			cursor: pointer;
+
+			&:hover {
+				background-color: darken($peach, 2.5%);
+			}
+
+			&:focus {
+				outline: 0;
+			}
+		}
+	}
+}
+
+.playlist {
+	color: $medium_grey;
+
+	li {
+		min-height: 15px;
+		padding: 14px 20px;
+		border-top: 1px solid $light_grey;
+		transition: background 250ms;
+
+		button.delete {
+			float: right;
+			margin-top: -1px;
+			border: none;
+			background: none;
+			font-size: 1em;
+			color: lighten($medium_grey, 10%);
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			appearance: none;
+			cursor: pointer;
+
+			&:focus {
+				outline: 0;
+			}
+		}
+
+		&:first-of-type {
+			display: none;
+		}
+	}
+}
+
+.video-container {
+	position: relative;
+	height: 0;
+	// padding-bottom: 56.25%; /* 16:9 */
+	background: $black;
+	
+	iframe {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
+}
+
+.button {
+	display: block;
+	width: 120px;
+	margin: 20px auto;
+	padding: 26px 32px;
+	background: $light_grey;
+	text-align: center;
+	text-decoration: none;
+	color: $medium_grey;
+}
+
