@@ -1,4 +1,4 @@
-app.controller('HomeController', ['$scope', '$rootScope', '$log', 'Tracks', 'Search', function ($scope, $rootScope, $log, Tracks, Search) {
+app.controller('HomeController', ['$scope', '$rootScope', '$log', 'Tracks', function ($scope, $rootScope, $log, Tracks) {
 
   $rootScope.playlist = {
     id: '603',

@@ -1,14 +1,14 @@
-app.controller('PlaylistController', ['$scope', '$routeParams', '$log', 'Tracks', 'Search', function ($scope, $routeParams, $log, Tracks, Search) {
+app.controller('PlaylistController', ['$scope', '$rootScope', '$routeParams', '$log', 'Tracks', function ($scope, $rootScope, $routeParams, $log, Tracks) {
 
-  $scope.playlist = {
+  $rootScope.playlist = {
     id: $routeParams.playlist_id,
     tracks: []
   };
 
-  Tracks.getTracks($scope.playlist.id).success(function(data){
-    $scope.playlist.tracks = data;
-    $log.info($scope.playlist.tracks);
-    if($scope.playlist.tracks.length > 0) {
+  Tracks.getTracks($rootScope.playlist.id).success(function(data){
+    $rootScope.playlist.tracks = data;
+    $log.info($rootScope.playlist.tracks);
+    if($rootScope.playlist.tracks.length > 0) {
       createPlayer();
     }
   });
@@ -21,34 +21,34 @@ app.controller('PlaylistController', ['$scope', '$routeParams', '$log', 'Tracks'
     }
   }
 
-  $scope.addTrack = function(id, title) {
-    Tracks.addTrack(id, title).success(function() {
-      Tracks.getTracks($scope.playlist.id).success(function(data){
-        $scope.playlist.tracks = data;
-        if($scope.playlist.tracks.length == 1) {
-          createPlayer();
-        }
-      });
-      $scope.query = '';
-      $log.info('Track added to playlist ...');
-    });
-  }
+  // $scope.addTrack = function(id, title) {
+  //   Tracks.addTrack(id, title).success(function() {
+  //     Tracks.getTracks($rootScope.playlist.id).success(function(data){
+  //       $rootScope.playlist.tracks = data;
+  //       if($rootScope.playlist.tracks.length == 1) {
+  //         createPlayer();
+  //       }
+  //     });
+  //     $scope.query = '';
+  //     $log.info('Track added to playlist ...');
+  //   });
+  // }
 
   $scope.removeTrack = function(id) {
     Tracks.removeTrack(id).success(function() {
-      Tracks.getTracks($scope.playlist.id).success(function(data){
-        $scope.playlist.tracks = data;
+      Tracks.getTracks($rootScope.playlist.id).success(function(data){
+        $rootScope.playlist.tracks = data;
       });
       $log.info('Track removed from playlist ...');
     });
   }
 
   $scope.queueNextTrack = function() {
-    Tracks.removeTrack($scope.playlist.tracks[0].id).success(function() {
-      Tracks.getTracks($scope.playlist.id).success(function(data){
-        $scope.playlist.tracks = data;
-        if($scope.playlist.tracks.length > 0) {
-          $scope.player.loadVideoById($scope.playlist.tracks[0].video_id);
+    Tracks.removeTrack($rootScope.playlist.tracks[0].id).success(function() {
+      Tracks.getTracks($rootScope.playlist.id).success(function(data){
+        $rootScope.playlist.tracks = data;
+        if($rootScope.playlist.tracks.length > 0) {
+          $scope.player.loadVideoById($rootScope.playlist.tracks[0].video_id);
         } else {
           $scope.player.stopVideo();
           $log.info('Playlist has ended ...');
@@ -58,18 +58,18 @@ app.controller('PlaylistController', ['$scope', '$routeParams', '$log', 'Tracks'
     });
   }
 
-  $scope.results = Search.getResults();
-  $scope.query = '';
+  // $scope.results = Search.getResults();
+  // $scope.query = '';
 
-  $scope.search = function() {
-    Search.listResults($scope.query);
-  }
+  // $scope.search = function() {
+  //   Search.listResults($scope.query);
+  // }
 
-  $scope.hasResults = function() {
-    if($scope.query != '') {
-      return true;
-    }
-  }
+  // $scope.hasResults = function() {
+  //   if($scope.query != '') {
+  //     return true;
+  //   }
+  // }
 
   function createPlayer() {
     var timer;
@@ -79,7 +79,7 @@ app.controller('PlaylistController', ['$scope', '$routeParams', '$log', 'Tracks'
     }
 
     $scope.player = new YT.Player('video', {
-      videoId: $scope.playlist.tracks[0].video_id,
+      videoId: $rootScope.playlist.tracks[0].video_id,
       playerVars: {
         rel: 0,
         showinfo: 0
