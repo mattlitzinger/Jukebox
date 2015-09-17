@@ -1,15 +1,15 @@
-app.controller('PlaylistController', ['$window', '$scope', '$log', 'Tracks', 'Search', function ($window, $scope, $log, Tracks, Search) {
-  
-  $scope.playlist = {
+app.controller('HomeController', ['$scope', '$rootScope', '$log', 'Tracks', 'Search', function ($scope, $rootScope, $log, Tracks, Search) {
+
+  $rootScope.playlist = {
     id: '603',
     tracks: []
   };
 
-  Tracks.getTracks($scope.playlist.id).success(function(data){
-    $scope.playlist.tracks = data;
-    $log.info($scope.playlist.tracks);
-    if($scope.playlist.tracks.length > 0) {
-      getYoutubeAPI();
+  Tracks.getTracks($rootScope.playlist.id).success(function(data){
+    $rootScope.playlist.tracks = data;
+    $log.info($rootScope.playlist.tracks);
+    if($rootScope.playlist.tracks.length > 0) {
+      createPlayer();
     }
   });
 
@@ -21,34 +21,34 @@ app.controller('PlaylistController', ['$window', '$scope', '$log', 'Tracks', 'Se
     }
   }
 
-  $scope.addTrack = function(id, title) {
-    Tracks.addTrack(id, title).success(function() {
-      Tracks.getTracks($scope.playlist.id).success(function(data){
-        $scope.playlist.tracks = data;
-        if($scope.playlist.tracks.length == 1) {
-          getYoutubeAPI();
-        }
-      });
-      $scope.query = '';
-      $log.info('Track added to playlist ...');
-    });
-  }
+  // $scope.addTrack = function(id, title) {
+  //   Tracks.addTrack(id, title).success(function() {
+  //     Tracks.getTracks($rootScope.playlist.id).success(function(data){
+  //       $rootScope.playlist.tracks = data;
+  //       if($rootScope.playlist.tracks.length == 1) {
+  //         createPlayer();
+  //       }
+  //     });
+  //     $scope.query = '';
+  //     $log.info('Track added to playlist ...');
+  //   });
+  // }
 
   $scope.removeTrack = function(id) {
     Tracks.removeTrack(id).success(function() {
-      Tracks.getTracks($scope.playlist.id).success(function(data){
-        $scope.playlist.tracks = data;
+      Tracks.getTracks($rootScope.playlist.id).success(function(data){
+        $rootScope.playlist.tracks = data;
       });
       $log.info('Track removed from playlist ...');
     });
   }
 
   $scope.queueNextTrack = function() {
-    Tracks.removeTrack($scope.playlist.tracks[0].id).success(function() {
-      Tracks.getTracks($scope.playlist.id).success(function(data){
-        $scope.playlist.tracks = data;
-        if($scope.playlist.tracks.length > 0) {
-          $scope.player.loadVideoById($scope.playlist.tracks[0].video_id);
+    Tracks.removeTrack($rootScope.playlist.tracks[0].id).success(function() {
+      Tracks.getTracks($rootScope.playlist.id).success(function(data){
+        $rootScope.playlist.tracks = data;
+        if($rootScope.playlist.tracks.length > 0) {
+          $scope.player.loadVideoById($rootScope.playlist.tracks[0].video_id);
         } else {
           $scope.player.stopVideo();
           $log.info('Playlist has ended ...');
@@ -58,23 +58,28 @@ app.controller('PlaylistController', ['$window', '$scope', '$log', 'Tracks', 'Se
     });
   }
 
-  $scope.results = Search.getResults();
-  $scope.query = '';
+  // $scope.results = Search.getResults();
+  // $scope.query = '';
 
-  $scope.search = function() {
-    Search.listResults($scope.query);
-  }
+  // $scope.search = function() {
+  //   Search.listResults($scope.query);
+  // }
 
-  $scope.hasResults = function() {
-    if($scope.query != '') {
-      return true;
-    }
-  }
+  // $scope.hasResults = function() {
+  //   if($scope.query != '') {
+  //     return true;
+  //   }
+  // }
 
-  $window.onYouTubeIframeAPIReady = function() {
+  function createPlayer() {
     var timer;
+
+    if($scope.player) {
+      $scope.player.destroy();
+    }
+
     $scope.player = new YT.Player('video', {
-      videoId: $scope.playlist.tracks[0].video_id,
+      videoId: $rootScope.playlist.tracks[0].video_id,
       playerVars: {
         rel: 0,
         showinfo: 0
@@ -138,15 +143,6 @@ app.controller('PlaylistController', ['$window', '$scope', '$log', 'Tracks', 'Se
       }
     });
     $log.info('Playlist is starting ...');
-  }
-
-  function getYoutubeAPI() {
-    var tag = document.createElement('script');
-    tag.src = 'http://www.youtube.com/iframe_api';
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-    $log.info('Youtube API is ready ...');
   }
 
 }]);
